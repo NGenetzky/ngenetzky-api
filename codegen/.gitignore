@@ -1,0 +1,6 @@
+# Ignore everything
+*
+
+# Explicitly include a few files/directories.
+!.gitignore
+!scripts/*
