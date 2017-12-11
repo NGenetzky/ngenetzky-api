@@ -11,12 +11,22 @@ do_fetch()
 {
     rm -rf "${GITROOT?}/docker/${PROJECT?}"
     mkdir -p "${GITROOT?}/docker/${PROJECT?}"
-    cp -r -T \
+
+    cp -r -T -v \
         "${GITROOT}/codegen/python-flask" \
         "${GITROOT}/docker/${PROJECT?}/python-flask"
-    cp -r -T \
+
+    cp -r -T -v \
         "${GITROOT}/codegen/bash" \
         "${GITROOT}/docker/${PROJECT?}/bash"
+
+    cp -r -T -v \
+        "${GITROOT}/codegen/python" \
+        "${GITROOT}/docker/${PROJECT?}/python"
+    cp -r -T -v \
+        "${GITROOT}/src/ngenetzky_py_client" \
+        "${GITROOT}/docker/${PROJECT?}/python"
+
 }
 
 docker_configure()
@@ -35,6 +45,7 @@ services:
     build: ./bash
     links:
       - "python-flask:server"
+    command: ["-c", "ngenetzky_bash_client --help"]
     environment:
       NGENETZKY_HOST: "server:8080"
     tty: true
@@ -48,6 +59,16 @@ services:
     - "127.0.0.1:9002:8080"
     environment:
       API_URL: "http://server:8080/nathansen/ngenetzky/api/swagger.json"
+
+  python:
+    build: ./python
+    links:
+      - "python-flask:server"
+    command: ["-m", "ngenetzky_py_client", "--", "--help"]
+    environment:
+      NGENETZKY_HOST: "server:8080"
+    tty: true
+    stdin_open: true
 EOF
 }
 
@@ -56,6 +77,14 @@ docker_up()
     (
         cd "${GITROOT?}/docker/${PROJECT}" ; sleep 1 ;
         docker-compose up
+    )
+}
+
+docker_run()
+{
+    (
+        cd "${GITROOT?}/docker/${PROJECT}" ; sleep 1 ;
+        docker-compose run $@
     )
 }
 
