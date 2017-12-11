@@ -45,9 +45,11 @@ services:
     build: ./bash
     links:
       - "python-flask:server"
-    command: ["-c", "ngenetzky_bash_client --help"]
     environment:
       NGENETZKY_HOST: "server:8080"
+    # CLI mode:
+    # command: ["-c", "ngenetzky_bash_client --help"]
+    # Interactive mode:
     tty: true
     stdin_open: true
 
@@ -64,9 +66,12 @@ services:
     build: ./python
     links:
       - "python-flask:server"
-    command: ["-m", "ngenetzky_py_client", "--", "--help"]
     environment:
       NGENETZKY_HOST: "server:8080"
+    # CLI mode:
+    # command: ["-m", "ngenetzky_py_client", "--", "--help"]
+    # Interactive mode:
+    entrypoint: "python3"
     tty: true
     stdin_open: true
 EOF
