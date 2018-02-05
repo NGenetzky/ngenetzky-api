@@ -11,7 +11,7 @@ info:
     name: "MIT"
     url: "https://opensource.org/licenses/MIT"
 host: "0.0.0.0"
-basePath: "v0"
+basePath: "/v0"
 tags:
 - name: "events"
   description: "Operations involving events"

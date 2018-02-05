@@ -1,5 +1,5 @@
 #!/bin/sh
-COMMIT="f9eee76f2bc98ee9f0345f39af59d3571bd0a26b"
+COMMIT="20761760531afb3b9fe36c0741dd6e151623f899"
 SWAGGER_URL="https://raw.githubusercontent.com/NGenetzky/ngenetzky-api/${COMMIT}/api/swagger.yaml"
 SERVER_PORT="80"
 curl -X POST \

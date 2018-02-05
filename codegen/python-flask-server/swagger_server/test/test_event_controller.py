@@ -18,7 +18,7 @@ class TestEventController(BaseTestCase):
         Add a new event
         """
         body = Event()
-        response = self.client.open('v0/event',
+        response = self.client.open('/v0/event',
                                     method='POST',
                                     data=json.dumps(body),
                                     content_type='application/json')
@@ -30,7 +30,7 @@ class TestEventController(BaseTestCase):
 
         Find event by ID
         """
-        response = self.client.open('v0/event/{eventId}'.format(eventId=789),
+        response = self.client.open('/v0/event/{eventId}'.format(eventId=789),
                                     method='GET')
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
@@ -41,7 +41,7 @@ class TestEventController(BaseTestCase):
         Update an existing event
         """
         body = Event()
-        response = self.client.open('v0/event',
+        response = self.client.open('/v0/event',
                                     method='PUT',
                                     data=json.dumps(body),
                                     content_type='application/json')
