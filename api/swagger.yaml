@@ -1,135 +1,139 @@
-swagger: '2.0'
+---
+swagger: "2.0"
 info:
-  description: |
-    This is an API I am designing for myself using swagger.
-    You can find  out more about Swagger at [http://swagger.io](http://swagger.io)
-  version: 0.0.1
-  title: NGenetzky's API
-#  termsOfService: http://swagger.io/terms/
+  description: "This is an API I am designing for myself using swagger.\nYou can find\
+    \  out more about Swagger at [http://swagger.io](http://swagger.io)\n"
+  version: "0.0.1"
+  title: "NGenetzky's API"
   contact:
-    email: Nathan@Genetzky.us
+    email: "Nathan@Genetzky.us"
   license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+host: "virtserver.swaggerhub.com"
+basePath: "/nathansen/ngenetzky-api/1.0.0"
 tags:
-- name: events
-  description: Operations involving events
-- name: private
-  description: Private Operations
+- name: "events"
+  description: "Operations involving events"
+- name: "private"
+  description: "Private Operations"
+schemes:
+- "https"
+- "http"
 paths:
   /event:
     post:
       tags:
-      - event
-      summary: Add a new event
-      operationId: add_event
+      - "event"
+      summary: "Add a new event"
+      operationId: "add_event"
       consumes:
-      - application/json
+      - "application/json"
       produces:
-      - application/json
+      - "application/json"
       parameters:
-      - in: body
-        name: body
-        description: Object representing event
+      - in: "body"
+        name: "body"
+        description: "Object representing event"
         required: true
         schema:
-          $ref: '#/definitions/Event'
+          $ref: "#/definitions/Event"
       responses:
         405:
-          description: Validation exception
+          description: "Validation exception"
     put:
       tags:
-      - event
-      summary: Update an existing event
-      operationId: update_event
+      - "event"
+      summary: "Update an existing event"
+      operationId: "update_event"
       consumes:
-      - application/json
+      - "application/json"
       produces:
-      - application/json
+      - "application/json"
       parameters:
-      - in: body
-        name: body
-        description: Object representing event
+      - in: "body"
+        name: "body"
+        description: "Object representing event"
         required: true
         schema:
-          $ref: '#/definitions/Event'
+          $ref: "#/definitions/Event"
       responses:
         400:
-          description: Invalid ID supplied
+          description: "Invalid ID supplied"
         404:
-          description: Event not found
+          description: "Event not found"
         405:
-          description: Validation exception
-  /event/{eventId}:          
+          description: "Validation exception"
+  /event/{eventId}:
     get:
       tags:
-      - events
-      summary: Find event by ID
-      description: Returns a single event
-      operationId: get_event_by_id
+      - "events"
+      summary: "Find event by ID"
+      description: "Returns a single event"
+      operationId: "get_event_by_id"
       produces:
-      - application/json
+      - "application/json"
       parameters:
-      - name: eventId
-        in: path
-        description: ID of event to return
+      - name: "eventId"
+        in: "path"
+        description: "ID of event to return"
         required: true
-        type: integer
-        format: int64
+        type: "integer"
+        format: "int64"
       responses:
         200:
-          description: successful operation
+          description: "successful operation"
           schema:
-            $ref: '#/definitions/Event'
+            $ref: "#/definitions/Event"
         400:
-          description: Invalid ID supplied
+          description: "Invalid ID supplied"
         404:
-          description: Not found
+          description: "Not found"
 definitions:
   Event:
-    type: object
+    type: "object"
     properties:
       id:
-        type: integer
-        format: int64
+        type: "integer"
+        format: "int64"
       published_at:
-        type: string
-        format: date-time
-      name: 
-        type: string  
+        type: "string"
+        format: "date-time"
+      name:
+        type: "string"
       data:
-        type: string
+        type: "string"
+        description: "Event data in JSON format"
         default: "{}"
-        description: Event data in JSON format
       ttl:
-        type: integer
-        format: int64
+        type: "integer"
+        format: "int64"
+        description: "How long the event should persist (seconds)"
         default: 60
-        description: How long the event should persist (seconds)
+    example:
+      data: "{}"
+      name: "name"
+      id: 0
+      published_at: "2000-01-23T04:56:07.000+00:00"
+      ttl: 6
   Tag:
-    type: object
+    type: "object"
     properties:
       id:
-        type: integer
-        format: int64
+        type: "integer"
+        format: "int64"
       name:
-        type: string
+        type: "string"
   ApiResponse:
-    type: object
+    type: "object"
     properties:
       code:
-        type: integer
-        format: int32
+        type: "integer"
+        format: "int32"
       type:
-        type: string
+        type: "string"
       message:
-        type: string
+        type: "string"
 externalDocs:
-  description: Feel free to look at the source code for this api.
-  url: https://github.com/NGenetzky/ngenetzky-api/
-# Added by API Auto Mocking Plugin
-host: virtserver.swaggerhub.com
-basePath: /nathansen/ngenetzky-api/1.0.0
-schemes:
- - https
- - http
+  description: "Feel free to look at the source code for this api."
+  url: "https://github.com/NGenetzky/ngenetzky-api/"
