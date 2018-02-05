@@ -10,8 +10,8 @@ info:
   license:
     name: "MIT"
     url: "https://opensource.org/licenses/MIT"
-host: "virtserver.swaggerhub.com"
-basePath: "/nathansen/ngenetzky-api/1.0.0"
+host: "0.0.0.0"
+basePath: "/v0"
 tags:
 - name: "events"
   description: "Operations involving events"
@@ -67,7 +67,7 @@ paths:
   /event/{eventId}:
     get:
       tags:
-      - "events"
+      - "event"
       summary: "Find event by ID"
       description: "Returns a single event"
       operationId: "get_event_by_id"
