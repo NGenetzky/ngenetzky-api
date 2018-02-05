@@ -18,10 +18,20 @@ class TestEventController(BaseTestCase):
         Add a new event
         """
         body = Event()
-        response = self.client.open('/nathansen/ngenetzky-api/1.0.0/event',
+        response = self.client.open('v0/event',
                                     method='POST',
                                     data=json.dumps(body),
                                     content_type='application/json')
+        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
+    def test_get_event_by_id(self):
+        """
+        Test case for get_event_by_id
+
+        Find event by ID
+        """
+        response = self.client.open('v0/event/{eventId}'.format(eventId=789),
+                                    method='GET')
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
     def test_update_event(self):
@@ -31,7 +41,7 @@ class TestEventController(BaseTestCase):
         Update an existing event
         """
         body = Event()
-        response = self.client.open('/nathansen/ngenetzky-api/1.0.0/event',
+        response = self.client.open('v0/event',
                                     method='PUT',
                                     data=json.dumps(body),
                                     content_type='application/json')

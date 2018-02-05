@@ -20,6 +20,18 @@ def add_event(body):
     return 'do some magic!'
 
 
+def get_event_by_id(eventId):
+    """
+    Find event by ID
+    Returns a single event
+    :param eventId: ID of event to return
+    :type eventId: int
+
+    :rtype: Event
+    """
+    return 'do some magic!'
+
+
 def update_event(body):
     """
     Update an existing event
