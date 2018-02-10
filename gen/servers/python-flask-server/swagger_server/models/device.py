@@ -65,6 +65,8 @@ class Device(Model):
         :param name: The name of this Device.
         :type name: str
         """
+        if name is None:
+            raise ValueError("Invalid value for `name`, must not be `None`")
 
         self._name = name
 

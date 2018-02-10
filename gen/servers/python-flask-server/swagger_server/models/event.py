@@ -100,6 +100,8 @@ class Event(Model):
         :param published_at: The published_at of this Event.
         :type published_at: datetime
         """
+        if published_at is None:
+            raise ValueError("Invalid value for `published_at`, must not be `None`")
 
         self._published_at = published_at
 
@@ -121,6 +123,8 @@ class Event(Model):
         :param name: The name of this Event.
         :type name: str
         """
+        if name is None:
+            raise ValueError("Invalid value for `name`, must not be `None`")
 
         self._name = name
 

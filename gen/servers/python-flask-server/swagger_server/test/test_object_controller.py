@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 
-from swagger_server.models.arg_vector import ArgVector
+from swagger_server.models.api_response import ApiResponse
 from swagger_server.models.patch_request import PatchRequest
 from . import BaseTestCase
 from six import BytesIO
@@ -18,10 +18,10 @@ class TestObjectController(BaseTestCase):
 
         Call a function/method.
         """
-        argv = ArgVector()
+        args = 'args_example'
         response = self.client.open('/v0/call/{objId}/{name}'.format(objId=56, name='name_example'),
                                     method='POST',
-                                    data=json.dumps(argv),
+                                    data=json.dumps(args),
                                     content_type='application/json')
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
@@ -51,7 +51,7 @@ class TestObjectController(BaseTestCase):
         """
         Test case for patch_state
 
-        Add a new event
+        Partially modify the state of an object
         """
         body = PatchRequest()
         response = self.client.open('/v0/state/{objId}'.format(objId=56),

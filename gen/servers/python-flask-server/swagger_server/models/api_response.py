@@ -64,6 +64,8 @@ class ApiResponse(Model):
         :param code: The code of this ApiResponse.
         :type code: int
         """
+        if code is None:
+            raise ValueError("Invalid value for `code`, must not be `None`")
 
         self._code = code
 

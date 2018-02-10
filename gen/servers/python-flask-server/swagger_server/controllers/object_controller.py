@@ -1,5 +1,5 @@
 import connexion
-from swagger_server.models.arg_vector import ArgVector
+from swagger_server.models.api_response import ApiResponse
 from swagger_server.models.patch_request import PatchRequest
 from datetime import date, datetime
 from typing import List, Dict
@@ -7,7 +7,7 @@ from six import iteritems
 from ..util import deserialize_date, deserialize_datetime
 
 
-def call_fn(objId, name, argv):
+def call_fn(objId, name, args=None):
     """
     Call a function/method.
     
@@ -15,20 +15,18 @@ def call_fn(objId, name, argv):
     :type objId: int
     :param name: Function/Method Name.
     :type name: str
-    :param argv: Parameters/Arguments
-    :type argv: dict | bytes
+    :param args: Parameters/Arguments
+    :type args: str
 
-    :rtype: int
+    :rtype: ApiResponse
     """
-    if connexion.request.is_json:
-        argv = ArgVector.from_dict(connexion.request.get_json())
     return 'do some magic!'
 
 
 def get_reg(objId, index):
     """
     Get the value of a register
-    Returns a single event
+    
     :param objId: Identified object to act on.
     :type objId: int
     :param index: Index of the register.
@@ -53,7 +51,7 @@ def get_state(objId):
 
 def patch_state(objId, body):
     """
-    Add a new event
+    Partially modify the state of an object
     
     :param objId: Identified object to act on.
     :type objId: int
