@@ -5,6 +5,6 @@ build()
 {
   docker build \
       -t ${DOCKER_USER?}/ngapi-python-flask-server:0.0.1 \
-      "${GITROOT}/codegen/python-flask-server"
+      "${GITROOT}/gen/servers/python-flask-server"
 }
 build $@
