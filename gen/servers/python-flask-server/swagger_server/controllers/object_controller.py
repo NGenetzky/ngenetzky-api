@@ -6,6 +6,7 @@ from typing import List, Dict
 from six import iteritems
 from ..util import deserialize_date, deserialize_datetime
 
+from ..uobj import create_reg
 
 def call_fn(objId, name, args=None):
     """
@@ -20,7 +21,9 @@ def call_fn(objId, name, args=None):
 
     :rtype: ApiResponse
     """
-    return 'do some magic!'
+    o = create_reg()
+    ar = ApiResponse(o.id, o.uuid)
+    return ar
 
 
 def get_reg(objId, index):
