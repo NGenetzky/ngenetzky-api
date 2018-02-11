@@ -1,0 +1,180 @@
+---
+swagger: "2.0"
+info:
+  description: "This is an API I am designing for myself using swagger.\nYou can find\
+    \  out more about Swagger at [http://swagger.io](http://swagger.io)\n"
+  version: "0.0.1"
+  title: "NGenetzky's API"
+  contact:
+    email: "Nathan@Genetzky.us"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+host: "0.0.0.0"
+basePath: "/v0"
+tags:
+- name: "trello"
+  description: "Interact with Trello"
+schemes:
+- "https"
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /uri:
+    post:
+      operationId: "register"
+      parameters:
+      - name: "model"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "uri"
+        required: true
+        schema:
+          $ref: "#/definitions/UniversalResource"
+      responses:
+        200:
+          description: "successfully registered device"
+          schema:
+            $ref: "#/definitions/UniversalResource"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+  /trello/:
+    post:
+      tags:
+      - "trello"
+      operationId: "trello_post"
+      parameters:
+      - name: "key"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "token"
+        in: "query"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "query"
+        required: false
+        schema:
+          $ref: "#/definitions/TrelloQuery"
+      responses:
+        200:
+          description: "Returns the index of the querry."
+          schema:
+            type: "integer"
+      x-swagger-router-controller: "swagger_server.controllers.trello_controller"
+    put:
+      tags:
+      - "trello"
+      operationId: "trello_put"
+      parameters:
+      - name: "key"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "token"
+        in: "query"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Sucessfully added to DB."
+          schema:
+            type: "integer"
+      x-swagger-router-controller: "swagger_server.controllers.trello_controller"
+  /trello/{model}/{id}:
+    put:
+      tags:
+      - "trello"
+      operationId: "trello_model_id_put"
+      parameters:
+      - name: "model"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "key"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "token"
+        in: "query"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Sucessfully added to DB."
+          schema:
+            $ref: "#/definitions/UniversalResource"
+      x-swagger-router-controller: "swagger_server.controllers.trello_controller"
+definitions:
+  TrelloQuery:
+    type: "object"
+    properties:
+      uri:
+        type: "string"
+        format: "uri"
+      query_append:
+        type: "string"
+        description: "Extra query information"
+    externalDocs:
+      url: "https://trello.readme.io/v1.0/"
+    example:
+      uri: "{}"
+      query_append: "name"
+  TrelloAction:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "The ID of the action"
+      data:
+        type: "object"
+        description: "Relevant information regarding the action"
+        properties: {}
+      date:
+        type: "string"
+        format: "date-time"
+        description: "When the action occurred"
+      idMemberCreator:
+        type: "string"
+        description: "The ID of the member who caused the action"
+      type:
+        type: "string"
+        description: "The type of the action. See list of Action Types for options."
+    externalDocs:
+      url: "https://trello.readme.io/v1.0/reference#action-object"
+    example:
+      id: "{}"
+      data: "name"
+      date: "2017-12-12T17:00:00.000Z"
+      idMemberCreator: 0
+      type: 6
+  UniversalResource:
+    type: "object"
+    required:
+    - "uri"
+    properties:
+      uri:
+        type: "string"
+        format: "uri"
+      uuid:
+        type: "string"
+        format: "uuid"
+    example:
+      uri: "http://example.com/aeiou"
+      uuid: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+externalDocs:
+  description: "Feel free to look at the source code for this api."
+  url: "https://github.com/NGenetzky/ngenetzky-api/"
