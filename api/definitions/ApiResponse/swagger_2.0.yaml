@@ -1,0 +1,14 @@
+  ApiResponse:
+    type: "object"
+    required:
+    - "code"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
+        example: "everything is ok"
+    example:
+      code: 0
+      message: "everything is ok"

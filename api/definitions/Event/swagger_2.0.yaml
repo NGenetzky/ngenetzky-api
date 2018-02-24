@@ -1,0 +1,23 @@
+  Event:
+    type: "object"
+    required:
+    - "name"
+    - "published_at"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      published_at:
+        type: "string"
+        format: "date-time"
+      name:
+        type: "string"
+      data:
+        type: "string"
+        description: "Event data in JSON format"
+        default: "{}"
+      ttl:
+        type: "integer"
+        format: "int64"
+        description: "How long the event should persist (seconds)"
+        default: 60

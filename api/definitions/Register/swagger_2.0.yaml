@@ -1,0 +1,16 @@
+  Register:
+    type: "object"
+    properties:
+      format:
+        type: "string"
+        enum:
+        - "uint8"
+        - "uint64"
+        - "int32"
+        - "int64"
+      value:
+        type: "integer"
+        format: "uint64"
+    example:
+      format: "uint8"
+      value: 255

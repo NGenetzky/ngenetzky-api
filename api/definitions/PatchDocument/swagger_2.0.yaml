@@ -1,0 +1,30 @@
+  PatchDocument:
+    required:
+    - "op"
+    - "path"
+    properties:
+      op:
+        type: "string"
+        description: "The operation to be performed"
+        enum:
+        - "add"
+        - "remove"
+        - "replace"
+        - "move"
+        - "copy"
+        - "test"
+      path:
+        type: "string"
+        description: "A JSON-Pointer"
+      value:
+        type: "object"
+        description: "The value to be used within the operations."
+        properties: {}
+      from:
+        type: "string"
+        description: "A string containing a JSON Pointer value."
+    externalDocs:
+      description: "JSON Patch is a format for describing changes to a JSON document.\
+        \ OpenAPI spec by [Aaron Saray](https://aaronsaray.com/2016/using-json-patch-in-swagger)"
+      url: "http://jsonpatch.com/"
+    description: "A JSONPatch document as defined by RFC 6902."

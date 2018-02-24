@@ -1,0 +1,13 @@
+  SavedState:
+    type: "object"
+    properties:
+      uuid:
+        type: "string"
+        format: "uuid"
+      lastUpdate:
+        type: "string"
+        format: "date-time"
+      hash:
+        type: "integer"
+        format: "int64"
+        description: "Hash computed from the state."
