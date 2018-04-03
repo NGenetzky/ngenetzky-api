@@ -1,29 +1,33 @@
 #!/bin/bash -x
 
-# Defaults
+################################################################################
+# Globals
 GITROOT="${GITROOT-$(readlink -f ./$(git rev-parse --show-cdup))}"
-COMMIT="65920aaa8afb9c035b58a63a091aea3f801a3f2d"
+#
+################################################################################
 
 get_swagger_url(){
-  local commit="${1-$COMMIT}"
-  local url="https://raw.githubusercontent.com/NGenetzky/ngenetzky-api/${commit}/api/swagger.yaml"
-  local http_status="$(curl -s -o /dev/null -w "%{http_code}" ${url})"
-  case ${http_status} in
-    200) echo "${url}" ; return 0 ;;
-    *) return 1;
-  esac
+  local commit="${1?}"
+  echo "https://raw.githubusercontent.com/NGenetzky/ngenetzky-api/${commit}/api/swagger.yaml"
 }
 
-use_commit_from_HEAD() {
-  local head="$(git rev-parse HEAD)"
-  local remotes_with_head="$(git branch -r --contains ${head})"
-  case ${remotes_with_head} in
-    '') # Empty
-      echo "$head not pushed. Using default (COMMIT=$COMMIT)" ;;
-    *) # Some remote has it.
-      COMMIT="${head}" ; echo "Using (COMMIT=$COMMIT)";;
-  esac
+################################################################################
+# api-yaml
+get_swagger_yaml(){
+  local url="${1?}"
+
+  local s_dir="${GITROOT}/api/"
+  local s_file="${s_dir}/swagger.yaml"
+  if [ ! -d ${s_file} ] ; then 
+    mkdir -p "${s_dir}"
+  fi
+  wget \
+      --no-check-certificate \
+      --output-document "${s_file}" \
+      "${url}"
 }
+#
+################################################################################
 
 ################################################################################
 # python-flask
@@ -81,14 +85,11 @@ gen_servers_python_flask()
 #
 ################################################################################
 
-gen_servers() {
-  local swagger_url="$(get_swagger_url $(git rev-parse HEAD))"
-  # TODO: This conditional could be better.
-  case $swagger_url in
-    *swagger.yaml*) echo "Using HEAD commit." ;;
-    *) local swagger_url="$(get_swagger_url)"
-  esac
-  # TODO: Case statement for other server types
+main() {
+  local commit="${COMMIT-$(git rev-parse HEAD)}"
+  local swagger_url="$(get_swagger_url ${commit})"
+
+  get_swagger_yaml "${swagger_url}"
   gen_servers_python_flask "${swagger_url}"
 }
 
@@ -96,6 +97,6 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     # Bash Strict Mode
     set -eu -o pipefail
     set -x
-    gen_servers "$@"
+    main "$@"
 fi
 
