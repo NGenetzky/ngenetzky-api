@@ -1,5 +1,7 @@
 #!/bin/bash -x
+
 # Defaults
+GITROOT="${GITROOT-$(readlink -f ./$(git rev-parse --show-cdup))}"
 COMMIT="65920aaa8afb9c035b58a63a091aea3f801a3f2d"
 
 get_swagger_url(){
@@ -23,15 +25,43 @@ use_commit_from_HEAD() {
   esac
 }
 
+################################################################################
+# python-flask
+
+python_flask_config()
+{
+  local swagger_url="${1?}"
+
+  local o_dir="${GITROOT}/python-flask-server/.swagger-codegen/"
+  local o_file="${o_dir}/config.json"
+  if [ ! -f ${o_file} ] ; then 
+    mkdir -p \
+      "${o_dir}"
+    jq --null-input \
+       --arg swagger_url "${swagger_url}" \
+       '. | .spec={} | .options={} | .swaggerUrl=$swagger_url' \
+       > "${o_file}"
+  fi
+  if [ ! -f ${o_file} ] ; then 
+    cat "${o_file}" \
+    | jq \
+       --arg swagger_url "${swagger_url}" \
+       '. | .swaggerUrl=$swagger_url'
+       > "${o_file}"
+  fi
+  cat "${o_file}"
+}
+
 post_gen_servers_python_flask()
 {
   local swagger_url="${1?}"
-  local server_port="80"
+
+  local config="$(python_flask_config ${swagger_url})"
   local gen_reply=$(curl -X POST \
     "http://generator.swagger.io/api/gen/servers/python-flask" \
     -H  "accept: application/json" \
     -H  "content-type: application/json" \
-    -d "{  \"spec\": {},  \"options\": {    \"serverPort\": \"${server_port}\"  },  \"swaggerUrl\": \"${swagger_url}\"}" \
+    -d "${config}"
     ) || return $?
   echo $gen_reply | jq --raw-output .link
 }
@@ -40,12 +70,20 @@ gen_servers_python_flask()
 {
   local swagger_url="${1?}"
   local filename="${2-python-flask-generated.zip}"
+
   local url=$(post_gen_servers_python_flask  ${swagger_url})
   wget --output-document "${filename}" "${url}"
+  unzip -o \
+    -d "${GITROOT}" \
+    "${filename}"
 }
+
+#
+################################################################################
 
 gen_servers() {
   local swagger_url="$(get_swagger_url $(git rev-parse HEAD))"
+  # TODO: This conditional could be better.
   case $swagger_url in
     *swagger.yaml*) echo "Using HEAD commit." ;;
     *) local swagger_url="$(get_swagger_url)"
