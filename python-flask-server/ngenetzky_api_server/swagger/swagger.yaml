@@ -1,0 +1,268 @@
+---
+swagger: "2.0"
+info:
+  description: "This is an API I am designing for myself using swagger. You can find\
+    \ out more about Swagger at [http://swagger.io](http://swagger.io)"
+  version: "0.0.2"
+  title: "NGenetzky's API"
+  contact:
+    email: "Nathan@Genetzky.us"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+host: "0.0.0.0"
+basePath: "/v0"
+tags:
+- name: "event"
+  description: "Operations involving events"
+- name: "object"
+  description: "Operations on objects"
+schemes:
+- "https"
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /call/{objId}/{name}:
+    post:
+      tags:
+      - "object"
+      summary: "Call a function/method."
+      operationId: "call_obj_id_name_post"
+      parameters:
+      - name: "objId"
+        in: "path"
+        description: "Identified object to act on."
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "name"
+        in: "path"
+        description: "Function/Method Name."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "args"
+        description: "Parameters/Arguments"
+        required: false
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        404:
+          description: "Not found"
+      x-swagger-router-controller: "ngenetzky_api_server.controllers.object_controller"
+  /data/{type}/:
+    post:
+      summary: "Add new data"
+      operationId: "data_type_post"
+      parameters:
+      - name: "type"
+        in: "path"
+        required: true
+        type: "number"
+        format: "int32"
+      - in: "body"
+        name: "data"
+        required: true
+        schema:
+          type: "object"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/UniversalObject"
+      x-swagger-router-controller: "ngenetzky_api_server.controllers.default_controller"
+  /event:
+    post:
+      tags:
+      - "event"
+      summary: "Add a new event"
+      operationId: "event_post"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Object representing event"
+        required: true
+        schema:
+          $ref: "#/definitions/Event"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "ngenetzky_api_server.controllers.event_controller"
+  /event/{eventId}:
+    get:
+      tags:
+      - "event"
+      summary: "Find event by ID"
+      description: "Returns a single event"
+      operationId: "event_event_id_get"
+      parameters:
+      - name: "eventId"
+        in: "path"
+        description: "ID of event to return"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Event"
+        404:
+          description: "Not found"
+      x-swagger-router-controller: "ngenetzky_api_server.controllers.event_controller"
+  /uuid1/:
+    post:
+      summary: "Create new or add existing UUID1."
+      operationId: "uuid1_post"
+      parameters:
+      - in: "body"
+        name: "obj"
+        required: false
+        schema:
+          $ref: "#/definitions/uuid1"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "ngenetzky_api_server.controllers.default_controller"
+  /variable/{objId}/{name}:
+    get:
+      tags:
+      - "object"
+      summary: "Returns variable"
+      operationId: "variable_obj_id_name_get"
+      parameters:
+      - name: "objId"
+        in: "path"
+        description: "Identified object to act on."
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "name"
+        in: "path"
+        description: "Variable Name."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "string"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Not found"
+      x-swagger-router-controller: "ngenetzky_api_server.controllers.object_controller"
+    put:
+      tags:
+      - "object"
+      summary: "Set variable"
+      operationId: "variable_obj_id_name_put"
+      parameters:
+      - name: "objId"
+        in: "path"
+        description: "Identified object to act on."
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "name"
+        in: "path"
+        description: "Variable Name."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Success"
+        404:
+          description: "Not found"
+      x-swagger-router-controller: "ngenetzky_api_server.controllers.object_controller"
+definitions:
+  ApiResponse:
+    type: "object"
+    required:
+    - "code"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
+        example: "everything is ok"
+    example:
+      code: 0
+      message: "everything is ok"
+  Event:
+    type: "object"
+    required:
+    - "name"
+    - "published_at"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+      published_at:
+        type: "string"
+        format: "date-time"
+      name:
+        type: "string"
+      data:
+        type: "string"
+        description: "Event data in JSON format"
+        default: "{}"
+      ttl:
+        type: "integer"
+        format: "int64"
+        description: "How long the event should persist (seconds)"
+        default: 60
+    example:
+      data: "{}"
+      name: "name"
+      id: 0
+      published_at: "2000-01-23T04:56:07.000+00:00"
+      ttl: 6
+  UniversalObject:
+    properties:
+      uuid:
+        type: "string"
+        format: "uuid"
+      type:
+        type: "string"
+      id:
+        type: "integer"
+        format: "int32"
+    example:
+      uuid: "0729a580-2240-11e6-9eb5-0002a5d5c51b"
+      type: "led"
+      id: "1"
+  uuid1:
+    required:
+    - "uuid"
+    properties:
+      uuid:
+        type: "string"
+        format: "uuid"
+      node:
+        type: "integer"
+        format: "int64"
+      time:
+        type: "integer"
+        format: "int64"
+    externalDocs:
+      url: "https://docs.python.org/3/library/uuid.html"
+    example:
+      uuid: "0729a580-2240-11e6-9eb5-0002a5d5c51b"
+      type: "led"
+      id: "1"
+externalDocs:
+  description: "Feel free to look at the source code for this api."
+  url: "https://github.com/NGenetzky/ngenetzky-api/"
