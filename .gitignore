@@ -99,3 +99,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# No archive files
+*.zip
+
+# generator.swagger.io
+.swagger-codegen-ignore
