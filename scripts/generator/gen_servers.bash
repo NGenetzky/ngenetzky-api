@@ -46,14 +46,13 @@ python_flask_config()
        '. | .spec={} | .options={} | .swaggerUrl=$swagger_url' \
        > "${o_file}"
   fi
-  if [ ! -f ${o_file} ] ; then 
+  local config="$(\
     cat "${o_file}" \
-    | jq \
+      | jq \
        --arg swagger_url "${swagger_url}" \
-       '. | .swaggerUrl=$swagger_url'
-       > "${o_file}"
-  fi
-  cat "${o_file}"
+       '. | .swaggerUrl=$swagger_url' \
+  )"
+  echo "${config}" | tee "${o_file}"
 }
 
 post_gen_servers_python_flask()
