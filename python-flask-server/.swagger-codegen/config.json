@@ -1,0 +1,9 @@
+{
+  "spec": {},
+  "options": {
+    "packageName": "ngenetzky_api_server",
+    "packageVersion": "0.0.2",
+    "serverPort": "80"
+  },
+  "swaggerUrl": "https://raw.githubusercontent.com/NGenetzky/ngenetzky-api/639ef2931d3fc1535ec71918b12a1976bed5825e/api/swagger.yaml"
+}
